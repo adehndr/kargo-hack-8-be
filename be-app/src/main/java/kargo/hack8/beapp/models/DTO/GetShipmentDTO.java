@@ -62,6 +62,14 @@ public class GetShipmentDTO {
         this.loadingDate = loadingDate;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     private Long id;
     private String shipmentNumber;
     private Truck truck;
@@ -69,5 +77,5 @@ public class GetShipmentDTO {
     private String origin;
     private String destination;
     private Date loadingDate;
-
+    private String status;
 }
