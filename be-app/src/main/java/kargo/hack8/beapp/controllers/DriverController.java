@@ -1,7 +1,6 @@
 package kargo.hack8.beapp.controllers;
 
 
-import java.sql.Date;
 
 import javax.validation.Valid;
 
@@ -26,9 +25,12 @@ public class DriverController {
     @Autowired
     private DriverService driverService;
 
+    long now = System.currentTimeMillis();
+    Date date = new Date(now);
+
     @PostMapping
-    public ResponseEntity<Driver> create(
-            @RequestBody @Valid Driver driver){
+    public ResponseEntity<Driver> create(@RequestBody @Valid Driver driver){
+        driver.setCreatedAt(date);
         return ResponseEntity.status(HttpStatus.OK).body(driverService.create(driver));
     }
 

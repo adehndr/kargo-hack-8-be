@@ -29,7 +29,7 @@ public class Driver {
     private Boolean status;
 
     private Long id_number;
-    private Long lsicense_number;
+    private Long license_number;
 
     
 
