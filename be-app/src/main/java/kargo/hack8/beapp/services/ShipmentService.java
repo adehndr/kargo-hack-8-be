@@ -92,6 +92,9 @@ public class ShipmentService {
             response.setStatus(HttpStatus.BAD_REQUEST);
             return response;
         }
+
+        checkAllocatedDrivertruck(shipment);
+
         Shipment shipmentResponse = shipmentRepository.save(shipment);
         response.setMessages("Success update shipment data");
         response.setPayload(generateGetDTOFromShipment(shipmentResponse));
@@ -118,5 +121,11 @@ public class ShipmentService {
             getShipmentDTO.setDriver(driver.orElse(null));
         }
         return getShipmentDTO;
+    }
+
+    private void checkAllocatedDrivertruck(Shipment shipment) {
+        if ("Completed".equals(shipment.getStatus())) {
+            return;
+        }
     }
 }
