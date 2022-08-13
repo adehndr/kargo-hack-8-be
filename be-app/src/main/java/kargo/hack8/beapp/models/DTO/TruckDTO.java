@@ -6,7 +6,7 @@ public class TruckDTO {
     private String truckType;
     private String truckPlateType;
     private Long truckProductionYear; 
-    private String status;
+    private Boolean status;
     private Long attachmentIdSTNK;
     private Long attachmentIdKIR;
 
@@ -28,16 +28,19 @@ public class TruckDTO {
     public void setTruckPlateType(String truckPlateType) {
         this.truckPlateType = truckPlateType;
     }
+    
     public Long getTruckProductionYear() {
         return truckProductionYear;
     }
+
     public void setTruckProductionYear(Long truckProductionYear) {
         this.truckProductionYear = truckProductionYear;
     }
-    public String getStatus() {
+
+    public Boolean getStatus() {
         return status;
     }
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
     public Long getAttachmentIdSTNK() {

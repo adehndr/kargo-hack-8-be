@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "tbl_trucks")
@@ -29,7 +28,7 @@ public class Truck {
     private Long truckProductionYear; 
 
     @Column(name="status",nullable = true)
-    private String status;
+    private Boolean status;
 
     @Column(name="id_attachment_STNK",nullable = true)
     private Long attachmentIdSTNK;
@@ -76,12 +75,12 @@ public class Truck {
     public void setTruckProductionYear(Long truckProductionYear) {
         this.truckProductionYear = truckProductionYear;
     }
-
-    public String getStatus() {
+    
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
