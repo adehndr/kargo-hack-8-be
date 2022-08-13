@@ -1,6 +1,9 @@
 package kargo.hack8.beapp.models.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.sql.Date;
 
 @Entity
@@ -11,39 +14,54 @@ public class Shipment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "shipment_number", nullable = false)
+    @NotNull
+    @Column(name = "shipment_number")
     private String shipmentNumber;
 
-    //TODO refer to truck
     @Column(name = "id_truck")
     private Long idTruck;
 
-    //TODO refer to driver
     @Column(name = "id_driver")
     private Long idDriver;
 
-    @Column(name = "origin", nullable = false)
+    @NotNull
+    @Column(name = "origin")
     private String origin;
 
-    @Column(name = "destination", nullable = false)
+    @NotNull
+    @Column(name = "destination")
     private String destination;
 
+    @NotNull
     @Column(name="loading_date")
-    private Date loading_date;
+    private Date loadingDate;
+
+    @NotNull
+    @Column(name="status")
+    private String status;
 
     public Shipment(Long id, String shipmentNumber, Long idTruck, Long idDriver,
-                    String origin, String destination, Date loading_date) {
+                    String origin, String destination, Date loadingDate, String status) {
         this.id = id;
         this.shipmentNumber = shipmentNumber;
         this.idTruck = idTruck;
         this.idDriver = idDriver;
         this.origin = origin;
         this.destination = destination;
-        this.loading_date = loading_date;
+        this.loadingDate = loadingDate;
+        this.status = status;
     }
 
     public Shipment() {
 
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Long getId() {
@@ -94,11 +112,11 @@ public class Shipment {
         this.destination = destination;
     }
 
-    public Date getLoading_date() {
-        return loading_date;
+    public Date getLoadingDate() {
+        return loadingDate;
     }
 
-    public void setLoading_date(Date loading_date) {
-        this.loading_date = loading_date;
+    public void setLoadingDate(Date loadingDate) {
+        this.loadingDate = loadingDate;
     }
 }
