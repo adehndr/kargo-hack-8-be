@@ -2,10 +2,14 @@ package kargo.hack8.beapp.services;
 
 import java.util.Optional;
 
+import javax.validation.constraints.Null;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kargo.hack8.beapp.models.DTO.ResponseData;
 import kargo.hack8.beapp.models.entities.Truck;
 import kargo.hack8.beapp.repository.TruckRepository;
 
@@ -16,23 +20,43 @@ public class TruckService {
     @Autowired
     private TruckRepository truckRepository;
 
-    public Iterable<Truck> findAll() {
-        return truckRepository.findAll();
+    public ResponseData<Iterable<Truck>> findAll() {
+        ResponseData<Iterable<Truck>> responseData = new ResponseData<Iterable<Truck>>();
+        responseData.setMessages("success find all trucs");
+        responseData.setStatus(HttpStatus.OK);
+        responseData.setPayload(truckRepository.findAll());
+        return responseData;
     }
 
-    public Truck findById(Long id){
+    public ResponseData<Truck> findById(Long id){
+        ResponseData<Truck> responseData = new ResponseData<Truck>();
         Optional<Truck> truckFounded = truckRepository.findById(id);
         if (!truckFounded.isPresent()) {
-            return null;
+            responseData.setMessages("Cannot find truck with id " + id);
+            responseData.setStatus(HttpStatus.BAD_REQUEST);
+            responseData.setPayload(new Truck());
+            return responseData;
         }
-        return truckFounded.get();
+        responseData.setMessages("Success to find the truck");
+        responseData.setStatus(HttpStatus.OK);
+        responseData.setPayload(truckFounded.get());
+        return responseData;
     }
 
-    public Truck create(Truck truck){
-        return truckRepository.save(truck);
+    public ResponseData<Truck> create(Truck truck){
+        ResponseData<Truck> responseData = new ResponseData<Truck>();
+        responseData.setMessages("Success create a new truck");
+        responseData.setStatus(HttpStatus.OK);
+        responseData.setPayload(truckRepository.save(truck));
+        return responseData;
     }
 
-    public void delete(Long id){
+    public ResponseData<Void> delete(Long id){
         truckRepository.deleteById(id);
+        ResponseData<Void> responseData = new ResponseData<Void>();
+        responseData.setMessages("Success delete the truck");
+        responseData.setStatus(HttpStatus.OK);
+        responseData.setPayload(null);
+        return responseData;
     }
 }
