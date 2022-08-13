@@ -1,6 +1,7 @@
 package kargo.hack8.beapp.controllers;
 
 import java.sql.Date;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import kargo.hack8.beapp.models.DTO.ResponseData;
 import kargo.hack8.beapp.models.entities.Driver;
 import kargo.hack8.beapp.services.DriverService;
 @RestController
@@ -48,5 +50,10 @@ public class DriverController {
     @PutMapping
     public Driver update(@RequestBody Driver driver){
         return driverService.create(driver);
+    }
+
+    @GetMapping("/active")
+    public ResponseData<List<Driver>> findDriverActive(){
+        return driverService.findDriverActive();
     }
 }
