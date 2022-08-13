@@ -1,4 +1,4 @@
-package kargo.hack8.beapp.models.dto;
+package kargo.hack8.beapp.models.DTO;
 
 import kargo.hack8.beapp.models.entities.Driver;
 import kargo.hack8.beapp.models.entities.Truck;

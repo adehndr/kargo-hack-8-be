@@ -1,6 +1,7 @@
 package kargo.hack8.beapp.services;
 
-import kargo.hack8.beapp.models.dto.GetShipmentDTO;
+import kargo.hack8.beapp.models.DTO.ResponseData;
+import kargo.hack8.beapp.models.DTO.GetShipmentDTO;
 import kargo.hack8.beapp.models.entities.Driver;
 import kargo.hack8.beapp.models.entities.Shipment;
 import kargo.hack8.beapp.models.entities.Truck;
@@ -8,17 +9,25 @@ import kargo.hack8.beapp.repository.DriverRepository;
 import kargo.hack8.beapp.repository.ShipmentRepository;
 import kargo.hack8.beapp.repository.TruckRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @Transactional
 public class ShipmentService {
+
+    private final List<String> STATUS = Arrays.asList(
+        "None",
+        "Allocated",
+        "Ongoing to Origin",
+        "At Origin",
+        "Ongoing to Destination",
+        "At Destination",
+        "Completed"
+    );
 
     @Autowired
     private ShipmentRepository shipmentRepository;
@@ -29,37 +38,63 @@ public class ShipmentService {
     @Autowired
     private DriverRepository driverRepository;
 
-    public GetShipmentDTO create(Shipment shipment){
+    public ResponseData<GetShipmentDTO> create(Shipment shipment){
         Random rnd = new Random();
         int number = rnd.nextInt(999999);
 
         String shipmentNumber = "DO - " + number;
         shipment.setShipmentNumber(shipmentNumber);
-        Shipment response = shipmentRepository.save(shipment);
-        return generateGetDTOFromShipment(response);
-    }
+        Shipment shipmentResponse = shipmentRepository.save(shipment);
 
-    public GetShipmentDTO findById(Long id){
-        Optional<Shipment> product = shipmentRepository.findById(id);
-
-        if(product.isEmpty()) {
-            return generateGetDTOFromShipment(product.get());
-        }
-        return null;
-    }
-
-    public List<GetShipmentDTO> findAll() {
-        List<GetShipmentDTO> response = new ArrayList<>();
-        Iterable<Shipment> shipmentList = shipmentRepository.findAll();
-        for(Shipment shipment : shipmentList) {
-            response.add(generateGetDTOFromShipment(shipment));
-        }
+        ResponseData<GetShipmentDTO> response = new ResponseData<>();
+        response.setMessages("Success create shipment data");
+        response.setPayload(generateGetDTOFromShipment(shipmentResponse));
+        response.setStatus(HttpStatus.OK);
         return response;
     }
 
-    public GetShipmentDTO update(Shipment shipment) {
-        Shipment response = shipmentRepository.save(shipment);
-        return generateGetDTOFromShipment(response);
+    public ResponseData<GetShipmentDTO> findById(Long id){
+        Optional<Shipment> shipment = shipmentRepository.findById(id);
+
+        ResponseData<GetShipmentDTO> response = new ResponseData<>();
+        if(shipment.isPresent()) {
+            response.setMessages("Success find shipment by id data");
+            response.setPayload(generateGetDTOFromShipment(shipment.get()));
+            response.setStatus(HttpStatus.OK);
+            return response;
+        }
+        response.setMessages("Failed find shipment by id: " + id + " (data not found)");
+        response.setPayload(null);
+        response.setStatus(HttpStatus.BAD_REQUEST);
+        return null;
+    }
+
+    public ResponseData<List<GetShipmentDTO>> findAll() {
+        List<GetShipmentDTO> getShipmentDTOList = new ArrayList<>();
+        Iterable<Shipment> shipmentList = shipmentRepository.findAll();
+        for(Shipment shipment : shipmentList) {
+            getShipmentDTOList.add(generateGetDTOFromShipment(shipment));
+        }
+        ResponseData<List<GetShipmentDTO>> response = new ResponseData<>();
+        response.setMessages("Success find " + getShipmentDTOList.toArray().length
+                + " shipment data");
+        response.setPayload(getShipmentDTOList);
+        response.setStatus(HttpStatus.OK);
+        return response;
+    }
+
+    public ResponseData<GetShipmentDTO> update(Shipment shipment) {
+        ResponseData<GetShipmentDTO> response = new ResponseData<>();
+        if (!STATUS.contains(shipment.getStatus())){
+            response.setMessages("Failed update shipment data (invalid status)");
+            response.setPayload(generateGetDTOFromShipment(shipment));
+            response.setStatus(HttpStatus.BAD_REQUEST);
+        }
+        Shipment shipmentResponse = shipmentRepository.save(shipment);
+        response.setMessages("Success update shipment data");
+        response.setPayload(generateGetDTOFromShipment(shipmentResponse));
+        response.setStatus(HttpStatus.OK);
+        return response;
     }
 
     private GetShipmentDTO generateGetDTOFromShipment (Shipment shipment) {

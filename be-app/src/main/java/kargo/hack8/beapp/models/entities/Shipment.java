@@ -1,9 +1,7 @@
 package kargo.hack8.beapp.models.entities;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import java.sql.Date;
 
 @Entity
@@ -38,7 +36,7 @@ public class Shipment {
 
     @NotNull
     @Column(name="status")
-    private String status;
+    private String status = "None";
 
     public Shipment(Long id, String shipmentNumber, Long idTruck, Long idDriver,
                     String origin, String destination, Date loadingDate, String status) {
