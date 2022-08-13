@@ -1,6 +1,7 @@
 package kargo.hack8.beapp.services;
 
 import java.sql.Date;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -22,5 +23,13 @@ public class DriverService {
 
     public Driver create(Driver driver){
         return driverRepository.save(driver);
+    }
+
+    public Driver findById(Long id){
+        Optional<Driver> driverFounded = driverRepository.findById(id);
+        if (!driverFounded.isPresent()) {
+            return null;
+        }
+        return driverFounded.get();
     }
 }
