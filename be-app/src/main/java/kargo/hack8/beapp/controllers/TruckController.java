@@ -1,5 +1,7 @@
 package kargo.hack8.beapp.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -52,6 +54,11 @@ public class TruckController {
     @DeleteMapping("/{id}")
     public ResponseData<Void> delete (@PathVariable Long id){
         return truckService.delete(id);
+    }
+
+    @GetMapping("/active")
+    public ResponseData<List<Truck>> findTruckWhereActive(){
+        return truckService.findTruckWhereActive();
     }
 
 }

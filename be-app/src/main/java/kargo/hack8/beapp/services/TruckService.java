@@ -1,5 +1,6 @@
 package kargo.hack8.beapp.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.constraints.Null;
@@ -57,6 +58,14 @@ public class TruckService {
         responseData.setMessages("Success delete the truck");
         responseData.setStatus(HttpStatus.OK);
         responseData.setPayload(null);
+        return responseData;
+    }
+
+    public ResponseData<List<Truck>> findTruckWhereActive(){
+        ResponseData<List<Truck>> responseData = new ResponseData<List<Truck>>();
+        responseData.setMessages("success find all trucs");
+        responseData.setStatus(HttpStatus.OK);
+        responseData.setPayload(truckRepository.findByStatus(true));
         return responseData;
     }
 }

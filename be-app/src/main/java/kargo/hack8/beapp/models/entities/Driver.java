@@ -26,7 +26,7 @@ public class Driver {
     private Date createdAt;
 
     @Column(name = "status")
-    private Boolean status;
+    private Boolean status = true;
 
     private Long id_number;
     private Long license_number;
