@@ -55,6 +55,7 @@ public class ShipmentService {
 
     public ResponseData<GetShipmentDTO> findById(Long id){
         Optional<Shipment> shipment = shipmentRepository.findById(id);
+        System.out.println(shipment.isPresent());
 
         ResponseData<GetShipmentDTO> response = new ResponseData<>();
         if(shipment.isPresent()) {
@@ -66,7 +67,7 @@ public class ShipmentService {
         response.setMessages("Failed find shipment by id: " + id + " (data not found)");
         response.setPayload(null);
         response.setStatus(HttpStatus.BAD_REQUEST);
-        return null;
+        return response;
     }
 
     public ResponseData<List<GetShipmentDTO>> findAll() {
@@ -86,9 +87,11 @@ public class ShipmentService {
     public ResponseData<GetShipmentDTO> update(Shipment shipment) {
         ResponseData<GetShipmentDTO> response = new ResponseData<>();
         if (!STATUS.contains(shipment.getStatus())){
-            response.setMessages("Failed update shipment data (invalid status)");
+            response.setMessages("Failed update shipment data (invalid status : "
+                    + shipment.getStatus() + ")");
             response.setPayload(generateGetDTOFromShipment(shipment));
             response.setStatus(HttpStatus.BAD_REQUEST);
+            return response;
         }
         Shipment shipmentResponse = shipmentRepository.save(shipment);
         response.setMessages("Success update shipment data");
@@ -104,6 +107,7 @@ public class ShipmentService {
         getShipmentDTO.setDestination(shipment.getDestination());
         getShipmentDTO.setOrigin(shipment.getOrigin());
         getShipmentDTO.setLoadingDate(shipment.getLoadingDate());
+        getShipmentDTO.setStatus(shipment.getStatus());
 
         if (shipment.getIdTruck() != null) {
             Optional<Truck> truck = truckRepository.findById(shipment.getIdTruck());
@@ -114,7 +118,6 @@ public class ShipmentService {
             Optional<Driver> driver = driverRepository.findById(shipment.getIdDriver());
             getShipmentDTO.setDriver(driver.orElse(null));
         }
-
         return getShipmentDTO;
     }
 }
