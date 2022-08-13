@@ -124,8 +124,32 @@ public class ShipmentService {
     }
 
     private void checkAllocatedDrivertruck(Shipment shipment) {
-        if ("Completed".equals(shipment.getStatus())) {
-            return;
+        if (shipment.getIdDriver() != null) {
+            Optional<Driver> driverOpt = driverRepository.findById(shipment.getIdDriver());
+            if (driverOpt.isPresent()) {
+                Driver driver = driverOpt.get();
+                if ("Completed".equals(shipment.getStatus())) {
+                    driver.setStatus(true);
+                    driverRepository.save(driver);
+                } else {
+                    driver.setStatus(false);
+                    driverRepository.save(driver);
+                }
+            }
+        }
+
+        if (shipment.getIdTruck() != null) {
+            Optional<Truck> truckOpt = truckRepository.findById(shipment.getIdTruck());
+            if (truckOpt.isPresent()) {
+                Truck truck = truckOpt.get();
+                if ("Completed".equals(shipment.getStatus())) {
+                    truck.setStatus(true);
+                    truckRepository.save(truck);
+                } else {
+                    truck.setStatus(false);
+                    truckRepository.save(truck);
+                }
+            }
         }
     }
 }
