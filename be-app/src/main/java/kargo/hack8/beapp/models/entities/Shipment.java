@@ -36,7 +36,7 @@ public class Shipment {
 
     @NotNull
     @Column(name="status")
-    private String status = "None";
+    private String status = "Created";
 
     public Shipment(Long id, String shipmentNumber, Long idTruck, Long idDriver,
                     String origin, String destination, Date loadingDate, String status) {

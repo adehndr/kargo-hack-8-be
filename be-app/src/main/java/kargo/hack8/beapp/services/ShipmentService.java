@@ -20,7 +20,7 @@ import java.util.*;
 public class ShipmentService {
 
     private final List<String> STATUS = Arrays.asList(
-        "None",
+        "Created",
         "Allocated",
         "Ongoing to Origin",
         "At Origin",
@@ -55,7 +55,6 @@ public class ShipmentService {
 
     public ResponseData<GetShipmentDTO> findById(Long id){
         Optional<Shipment> shipment = shipmentRepository.findById(id);
-        System.out.println(shipment.isPresent());
 
         ResponseData<GetShipmentDTO> response = new ResponseData<>();
         if(shipment.isPresent()) {

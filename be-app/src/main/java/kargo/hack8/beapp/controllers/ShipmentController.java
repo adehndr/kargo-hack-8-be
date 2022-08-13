@@ -18,7 +18,7 @@ public class ShipmentController {
 
     @PostMapping
     public ResponseData<GetShipmentDTO> create(
-            @RequestBody @Valid Shipment shipment){
+            @RequestBody Shipment shipment){
         return shipmentService.create(shipment);
     }
 
